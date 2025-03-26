@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -29,7 +30,7 @@ public class BoardManager : MonoBehaviour
     public bool rotated = false;
     public bool promoted = false;
     public PieceChanger pieceChanger;
-
+    private GameObject winningPiece;
     public void Init()
     {
 
@@ -51,16 +52,11 @@ public class BoardManager : MonoBehaviour
         whiteTurn = true;
         ClearMoveIndicators();
         playing = false;
+        winningPiece = null;
         capturedPieceManager.ClearGraveyard();
         if (rotated)
         {
-            Debug.Log("flipping");
             FlipBoard();
-        }
-        else
-        {
-            Debug.Log(rotated);
-            Debug.Log("not flipping");
         }
     }
 
@@ -103,6 +99,16 @@ public class BoardManager : MonoBehaviour
 
     void Update()
     {
+        if (winningPiece != null)
+        {
+            Animator winAnimation = winningPiece.GetComponent<Animator>();
+            if (winAnimation.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !winAnimation.IsInTransition(0))
+            {
+                Piece piece = winningPiece.GetComponent<Piece>();
+                OnGameOver?.Invoke(piece.color);
+                ResetBoard();
+            }
+        }
         if (playing)
         {
             if (Input.GetMouseButtonDown(0))
@@ -110,7 +116,6 @@ public class BoardManager : MonoBehaviour
                 Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int gridPosition = tilemap.WorldToCell(worldPoint);
                 Vector2Int gridPosition2D = new Vector2Int(gridPosition.x, gridPosition.y);
-                Debug.Log(gridPosition2D);
                 if (selectedTile.HasValue)
                 {
                     if (piecePositions.TryGetValue(selectedTile.Value, out GameObject selectedPiece))
@@ -147,9 +152,12 @@ public class BoardManager : MonoBehaviour
                             }
                             if (playing)
                             {
-                                if (!promoted) {
+                                if (!promoted && winningPiece == null)
+                                {
                                     FlipBoard();
-                                } else {
+                                }
+                                else
+                                {
                                     promoted = false;
 
                                 }
@@ -175,10 +183,6 @@ public class BoardManager : MonoBehaviour
 
                         selectedTile = gridPosition2D;
                     }
-                }
-                else
-                {
-                    Debug.Log($"No piece at {gridPosition2D}");
                 }
             }
         }
@@ -232,7 +236,6 @@ public class BoardManager : MonoBehaviour
 
     IEnumerator PromotePawn(GameObject pieceObject, Piece piece, Vector2Int toPosition, Vector2Int fromPosition)
     {
-        Debug.Log("Promoting Pawn...");
         pieceChanger.ShowPromotionModal(piece.color);
         yield return pieceChanger.WaitForPieceSelection();
         PromotionPiece selectedPromotion = pieceChanger.GetSelectedPromotion();
@@ -310,7 +313,6 @@ public class BoardManager : MonoBehaviour
                         Piece opposingPiece = piece_.GetComponent<Piece>();
                         if (opposingPiece != null && opposingPiece.color != potentialWinner)
                         {
-                            Debug.Log("Testing Game");
                             List<Vector2Int> moves = opposingPiece.GetValidMoves(piecePositions, lastMove);
                             if (moves.Count > 0)
                             {
@@ -318,8 +320,20 @@ public class BoardManager : MonoBehaviour
                             }
                         }
                     }
-                    OnGameOver?.Invoke(potentialWinner);
-                    ResetBoard();
+                    foreach (var piece_ in piecePositions.Values)
+                    {
+                        Piece kingPiece = piece_.GetComponent<Piece>();
+                        if (kingPiece is King && kingPiece.color == potentialWinner)
+                        {
+                            winningPiece = piece_;
+                            break;
+                        }
+                    }
+                    if (winningPiece != null)
+                    {
+                        Animator winAnimation = winningPiece.GetComponent<Animator>();
+                        winAnimation.SetTrigger("win");
+                    }
                     return;
                 }
             }
@@ -339,12 +353,7 @@ public class BoardManager : MonoBehaviour
         {
             capturedPieceManager.boardAnimator.SetTrigger("flipBoard");
         }
-        else
-        {
-            Debug.LogWarning("Board Animator not assigned!");
-        }
         rotated = !rotated;
-        Debug.Log(rotated);
     }
 
 }

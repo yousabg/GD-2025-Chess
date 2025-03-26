@@ -43,8 +43,6 @@ public abstract class Piece : MonoBehaviour {
             if (currentPiece != null && currentPiece.color != this.color) {
                 if (currentPiece.TargetingKing(boardState)) {
                     return true;
-                } else {
-                    Debug.Log(currentPiece);
                 }
             }
         }
