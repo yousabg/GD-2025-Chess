@@ -31,6 +31,16 @@ public class BoardManager : MonoBehaviour
     public bool promoted = false;
     public PieceChanger pieceChanger;
     private GameObject winningPiece;
+    private AudioSource moveNoise;
+    private AudioSource captureNoise;
+    private AudioSource winNoise;
+
+    public void Start()
+    {
+        moveNoise = GetComponents<AudioSource>()[0];
+        captureNoise = GetComponents<AudioSource>()[1];
+        winNoise = GetComponents<AudioSource>()[2];
+    } 
     public void Init()
     {
 
@@ -45,8 +55,9 @@ public class BoardManager : MonoBehaviour
             Destroy(piece);
         }
         piecePositions.Clear();
-
-        ResetTile(selectedTile.Value);
+        if (selectedTile != null) {
+            ResetTile(selectedTile.Value);
+        }
         selectedTile = null;
         lastMove = null;
         whiteTurn = true;
@@ -195,13 +206,11 @@ public class BoardManager : MonoBehaviour
         if (piecePositions.TryGetValue(toPosition, out GameObject capturedPiece))
         {
             capturedPieceManager.CapturePiece(capturedPiece);
+            captureNoise.Play();
             piecePositions.Remove(toPosition);
         }
-        else if (piece is Pawn pawn)
+        else if (piece is Pawn pawn && Mathf.Abs(fromPosition.x - toPosition.x) == 1 && fromPosition.y + (pawn.color == "W" ? 1 : -1) == toPosition.y)
         {
-            int direction = pawn.color == "W" ? 1 : -1;
-            if (Mathf.Abs(fromPosition.x - toPosition.x) == 1 && fromPosition.y + direction == toPosition.y)
-            {
                 Vector2Int enPassantCapturePosition = new Vector2Int(toPosition.x, fromPosition.y);
                 if (piecePositions.TryGetValue(enPassantCapturePosition, out GameObject enPassantPiece))
                 {
@@ -209,10 +218,12 @@ public class BoardManager : MonoBehaviour
                     if (capturedPawn is Pawn && capturedPawn.color != pawn.color)
                     {
                         capturedPieceManager.CapturePiece(enPassantPiece);
+                        captureNoise.Play();
                         piecePositions.Remove(enPassantCapturePosition);
                     }
                 }
-            }
+        } else {
+            moveNoise.Play(0);
         }
 
         piecePositions.Remove(fromPosition);
@@ -333,6 +344,7 @@ public class BoardManager : MonoBehaviour
                     {
                         Animator winAnimation = winningPiece.GetComponent<Animator>();
                         winAnimation.SetTrigger("win");
+                        winNoise.Play();
                     }
                     return;
                 }
