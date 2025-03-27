@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      b_king_png_shadow_512px_0: 5071571060903245932
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

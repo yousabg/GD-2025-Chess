@@ -272,7 +272,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BlackPiecesWood-Sheet_0: 1578992388212078275
+      BlackPiecesWood-Sheet_1: 2852628523488562060
+      BlackPiecesWood-Sheet_2: 7767009818752128057
+      BlackPiecesWood-Sheet_3: 6912388483786373875
+      BlackPiecesWood-Sheet_4: -4884548723228302139
+      BlackPiecesWood-Sheet_5: 3319848048481584793
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

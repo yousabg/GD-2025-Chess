@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      w_queen_png_shadow_256px_0: 9202225062361116206
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      square brown dark_2x_ns_0: -2726150810210815546
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

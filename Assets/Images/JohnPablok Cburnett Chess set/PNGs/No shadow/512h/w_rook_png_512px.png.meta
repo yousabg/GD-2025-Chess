@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      w_rook_png_512px_0: 7193059422373704644
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

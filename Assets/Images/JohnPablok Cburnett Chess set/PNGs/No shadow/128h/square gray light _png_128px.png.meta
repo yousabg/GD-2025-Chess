@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      square gray light _png_128px_0: -3649534915555599930
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

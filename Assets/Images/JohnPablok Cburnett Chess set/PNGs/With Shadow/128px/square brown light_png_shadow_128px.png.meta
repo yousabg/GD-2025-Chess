@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      square brown light_png_shadow_128px_0: 5155558826161269686
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

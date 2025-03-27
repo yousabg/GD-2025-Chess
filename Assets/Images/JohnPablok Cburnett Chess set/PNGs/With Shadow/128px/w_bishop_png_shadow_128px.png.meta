@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      w_bishop_png_shadow_128px_0: 6963919076816843287
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

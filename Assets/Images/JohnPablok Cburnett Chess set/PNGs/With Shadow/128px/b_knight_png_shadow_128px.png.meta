@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      b_knight_png_shadow_128px_0: 3212218022419489214
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
